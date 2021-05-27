@@ -135,6 +135,23 @@ paths:
           description: A new referee has been added
         "400":
           description: wrong input parameters
+  /league/setPermission:
+    post:
+      tags:
+        - Match
+      summary: Update user`s permission
+      description: Set permission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Permission"
+      responses:
+        "201":
+          description: Updated user`s permission
+        "400":
+          description: wrong input parameters
   /league/getDetails:
     get:
       tags:
@@ -493,6 +510,18 @@ components:
         referee_id:
           type: integer
           description: Match referee id
+          example: 2
+    Permission:
+      type: object
+      description: Model containing Permission info
+      properties:
+        user_id:
+          type: integer
+          description: User id
+          example: 3
+        permission:
+          type: integer
+          description: user Permission
           example: 2
     Event:
       type: object
