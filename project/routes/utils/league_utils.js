@@ -57,9 +57,30 @@ async function setPermission(user_id, permission) {
   );
 }
 
+async function getAllMatches() {
+  const matches = await DButils.execQuery(`SELECT * FROM matches`);
+  let res = GamesData(matches);
+  return res;
+}
+
+function GamesData(matches) {
+  return matches.map((game) => {
+    const { date, time, hometeam, awayteam, stadium } = game;
+
+    return {
+      date: date,
+      time: time,
+      hometeam: hometeam,
+      awayteam: awayteam,
+      stadium: stadium,
+    };
+  });
+}
+
 exports.getLeagueDetails = getLeagueDetails;
 exports.addReferee = addReferee;
 exports.addEvent = addEvent;
 exports.addMatch = addMatch;
 exports.addResult = addResult;
 exports.setPermission = setPermission;
+exports.getAllMatches = getAllMatches;

@@ -13,7 +13,12 @@ async function getPlayerData(player_id) {
       api_token: process.env.api_token,
     },
   });
+  let moreDet = await getPlayersInfo([player.data.data.team_id]);
   return {
+    name: moreDet[0]["name"],
+    team_name: moreDet[0]["team_name"],
+    image: moreDet[0]["image"],
+    position: moreDet[0]["position"],
     commonname: player.data.data.common_name,
     nationality: player.data.data.nationality,
     birthdate: player.data.data.birthdate,
@@ -93,7 +98,6 @@ async function getPlayersByTeam(team_id) {
 //   };
 // }
 
-
 // RETURN ALL PLAYERS
 async function getPlayerDetails(player_name) {
   let player_list = [];
@@ -102,26 +106,28 @@ async function getPlayerDetails(player_name) {
     {
       params: {
         api_token: process.env.api_token,
+        include: "team",
       },
     }
   );
-  player.data.data.map((players) =>
-  player_list.push(players));
+  player.data.data.map((players) => player_list.push(players));
   let players_info = await Promise.all(player_list);
   return extractSearchPlayerData(players_info);
 }
 
 function extractSearchPlayerData(players_info) {
+  let name = "Not in a team";
   return players_info.map((player_info) => {
-    const { common_name, nationality,birthdate,birthplace,height,weight } = player_info;
+    const { fullname, image_path, position_id } = player_info;
+    if (player_info.hasOwnProperty("team")) {
+      name = player_info.team.data.name;
+    }
 
     return {
-      commonname: common_name,
-      nationality: nationality,
-      birthdate: birthdate,
-      birthplace: birthplace,
-      height: height,
-      weight: weight
+      name: fullname,
+      team_name: name,
+      image: image_path,
+      position: position_id,
     };
   });
 }
@@ -130,4 +136,3 @@ exports.getPlayersByTeam = getPlayersByTeam;
 exports.getPlayersInfo = getPlayersInfo;
 exports.getPlayerPage = getPlayerPage;
 exports.getPlayerDetails = getPlayerDetails;
-

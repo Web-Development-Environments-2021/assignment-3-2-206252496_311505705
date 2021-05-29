@@ -169,6 +169,23 @@ paths:
                   $ref: "#/components/schemas/League"
         "400":
           description: wrong input parameters
+  /league/getAllMatches:
+    get:
+      tags:
+        - League
+      summary: Get all matches
+      description: Get all leagues matches
+      responses:
+        "200":
+          description: Succesful got meatches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FutureMatch"
+        "400":
+          description: wrong input parameters
   /users/favoritematches:
     get:
       tags:
@@ -543,7 +560,6 @@ components:
           type: string
           description: Type of event
           example: Foul
-
     League:
       type: object
       description: League's details
@@ -597,6 +613,23 @@ components:
       type: object
       description: Deatails of player
       properties:
+        name:
+          type: string
+          description: player's name
+          example: Mor Zweiz
+        team_name:
+          type: string
+          description: player's team name
+          example: barca
+        image:
+          type: string
+          description: player's image
+          format: URL
+          example: https://cdn.sportmonks.com/images/soccer/players/11/84587.png
+        position:
+          type: integer
+          description: player's position number
+          example: 5
         commonname:
           type: string
           description: player's common name

@@ -8,7 +8,7 @@ const { Time } = require("mssql");
 router.get("/getDetails", async (req, res, next) => {
   try {
     let league_details = await league_utils.getLeagueDetails();
-    const games = await matches_utils.getFutureGames();
+    const games = await matches_utils.getGamesDetails();
     const next = await matches_utils.getNextGame(games[0]);
     league_details = { ...league_details, nextgame: next };
     res.send(league_details);
@@ -94,6 +94,15 @@ router.post("/setPermission", async (req, res, next) => {
   try {
     await league_utils.setPermission(req.body.user_id, req.body.permission);
     res.status(201).send("Permission updated");
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/getAllMatches", async (req, res, next) => {
+  try {
+    const matches = await league_utils.getAllMatches();
+    res.send(matches);
   } catch (error) {
     next(error);
   }
