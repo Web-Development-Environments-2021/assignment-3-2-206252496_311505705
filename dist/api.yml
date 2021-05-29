@@ -13,7 +13,7 @@ tags:
   - name: League
   - name: Players
   - name: Teams
-  - name: Match
+  - name: Matches
 paths:
   /Register:
     post:
@@ -70,7 +70,7 @@ paths:
   /league/addMatch:
     post:
       tags:
-        - Match
+        - League
       summary: Add new match to DB
       description: Match details
       requestBody:
@@ -87,7 +87,7 @@ paths:
   /league/addEvent:
     post:
       tags:
-        - Match
+        - League
       summary: Add new event to DB
       description: Event details
       requestBody:
@@ -102,9 +102,9 @@ paths:
         "400":
           description: wrong input parameters
   /league/addResult:
-    post:
+    put:
       tags:
-        - Match
+        - League
       summary: Add new result to Match
       description: New result
       requestBody:
@@ -119,9 +119,9 @@ paths:
         "400":
           description: wrong input parameters
   /league/addReferee:
-    post:
+    put:
       tags:
-        - Match
+        - League
       summary: Add new referee to Match
       description: New referee
       requestBody:
@@ -136,9 +136,9 @@ paths:
         "400":
           description: wrong input parameters
   /league/setPermission:
-    post:
+    put:
       tags:
-        - Match
+        - League
       summary: Update user`s permission
       description: Set permission
       requestBody:
@@ -190,7 +190,6 @@ paths:
     get:
       tags:
         - Users
-        - Matches
       summary: Return the favorite matches that were saved by user
       parameters: []
       responses:
@@ -208,7 +207,6 @@ paths:
       summary: save matche in the favorites list of a user
       tags:
         - Users
-        - Matches
       requestBody:
         content:
           application/json:

@@ -72,7 +72,7 @@ router.post("/addEvent", async (req, res, next) => {
   }
 });
 
-router.post("/addResult", async (req, res, next) => {
+router.put("/addResult", async (req, res, next) => {
   try {
     await league_utils.addResult(req.body.match_id, req.body.result);
     res.status(201).send("Result updated");
@@ -81,16 +81,19 @@ router.post("/addResult", async (req, res, next) => {
   }
 });
 
-router.post("/addReferee", async (req, res, next) => {
+router.put("/addReferee", async (req, res, next) => {
   try {
-    await league_utils.addReferee(req.body.referee_id, req.body.match_id);
-    res.status(201).send("Referee updated");
+    let result = await league_utils.addReferee(
+      req.body.referee_id,
+      req.body.match_id
+    );
+    res.status(201).send(result);
   } catch (error) {
     next(error);
   }
 });
 
-router.post("/setPermission", async (req, res, next) => {
+router.put("/setPermission", async (req, res, next) => {
   try {
     await league_utils.setPermission(req.body.user_id, req.body.permission);
     res.status(201).send("Permission updated");
