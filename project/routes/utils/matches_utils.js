@@ -28,10 +28,10 @@ function extractFavoriteGamesData(favorite_info) {
   });
 }
 
-async function getFutureGames() {
+async function getGamesDetails() {
   const matches = await DButils.execQuery(`SELECT * FROM matches`);
   let future = [];
-  let past = [];
+  let past_ids = [];
   let today = new Date(); // Today date
   let hours = String(today.getHours()).padStart(2, "0");
   let minute = String(today.getMinutes()).padStart(2, "0");
@@ -47,21 +47,21 @@ async function getFutureGames() {
     let hours2 = time_list[0];
     let minute2 = time_list[1];
     if (yyyy > yyyy2) {
-      past.push(temp);
+      past_ids.push(temp["match_id"]);
     } else if (yyyy == yyyy2) {
       if (mm > mm2) {
-        past.push(temp);
+        past_ids.push(temp["match_id"]);
       } else if (mm == mm2) {
         if (dd > dd2) {
-          past.push(temp);
+          past_ids.push(temp["match_id"]);
         } else if (dd == dd2) {
           // The same date
           if (hours > hours2) {
-            past.push(temp);
+            past_ids.push(temp["match_id"]);
           } else if (hours == hours2) {
             // The same hours
             if (minute > minute2) {
-              past.push(temp);
+              past_ids.push(temp["match_id"]);
             } else {
               future.push(temp);
             }
@@ -78,14 +78,50 @@ async function getFutureGames() {
       future.push(temp);
     }
   });
+  // console.log(past_ids);
   // console.log(future)
-  // console.log(past)
   let future_info = await Promise.all(future);
-  let past_info = await Promise.all(past);
-  // return extractPastGamesData(past_info);
-  let Pres = extractPastGamesData(past_info);
   let Fres = extractFutureGamesData(future_info);
-  return [Fres, Pres];
+  return [Fres, past_ids];
+}
+
+// Handel past games
+async function extractPastGamesData(match_id) {
+  let match = await DButils.execQuery(
+    `SELECT * FROM dbo.matches WHERE match_id='${match_id}'`
+  );
+  if (match.length === 0) return {};
+  match = match[0];
+  // get events from DB
+  let match_events = await getEvents(match_id);
+
+  result = {
+    date: match.date,
+    time: match.time,
+    hometeam: match.hometeam,
+    awayteam: match.awayteam,
+    stadium: match.stadium,
+    result: match.result,
+    events: match_events,
+  };
+
+  return result;
+}
+
+async function getEvents(match_id) {
+  let events = await DButils.execQuery(
+    `SELECT * FROM dbo.eventbook WHERE match_id='${match_id}'`
+  );
+  let res = [];
+  events.map((eventDet) =>
+    res.push({
+      date: eventDet.date,
+      time: eventDet.time,
+      gamemin: eventDet.gamemin,
+      event: eventDet.event,
+    })
+  );
+  return res;
 }
 
 // Handel future games
@@ -99,37 +135,6 @@ function extractFutureGamesData(future_info) {
       hometeam: hometeam,
       awayteam: awayteam,
       stadium: stadium,
-    };
-  });
-}
-
-async function test(match_id) {
-  const match_events = await DButils.execQuery(
-    `SELECT * FROM eventbook WHERE match_id = '${match_id}'`
-  );
-  return match_events;
-}
-
-// Handel past games
-function extractPastGamesData(past_info) {
-  return past_info.map((game) => {
-    const { date, time, hometeam, awayteam, stadium, result } = game;
-    // let all_event = {};
-    // let match_id = game["match_id"];
-    // DButils.execQuery(`SELECT * FROM eventbook WHERE match_id = '${match_id}'`)
-    // .then((games) => {
-    //     all_event= games;
-    //     })
-    // .catch();
-    const eventsFromDB = test(game["match_id"]);
-
-    return {
-      date: date,
-      time: time,
-      hometeam: hometeam,
-      awayteam: awayteam,
-      stadium: stadium,
-      result: result,
     };
   });
 }
@@ -179,7 +184,7 @@ function getNextGame(games) {
   return next;
 }
 
-exports.getFutureGames = getFutureGames;
+exports.getGamesDetails = getGamesDetails;
 exports.extractPastGamesData = extractPastGamesData;
 exports.getFavoritsGames = getFavoritsGames;
 exports.getNextGame = getNextGame;
