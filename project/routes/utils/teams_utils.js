@@ -1,22 +1,7 @@
 const axios = require("axios");
 const DButils = require("./DButils");
 
-// RETURN ONLY ONE TEAM
-// async function getTeamDetails(team_name) {
-//   const team = await axios.get(
-//     `https://soccer.sportmonks.com/api/v2.0/teams/search/${team_name}`,
-//     {
-//       params: {
-//         api_token: process.env.api_token,
-//       },
-//     }
-//   );
-//   return {
-//     team_name: team.data.data[0].name,
-//     team_logo: team.data.data[0].logo_path,
-//   };
-// }
-
+// RETURN ALL TEAM MATCHES
 async function getTeamMatches(team_id) {
   const team = await axios.get(
     `https://soccer.sportmonks.com/api/v2.0/teams/${team_id}`,
@@ -33,7 +18,7 @@ async function getTeamMatches(team_id) {
   return matches;
 }
 
-// RETURN ALL TEAMS
+// RETURN ALL TEAMS FROM SEARCH
 async function getTeamDetails(team_name) {
   let team_list = [];
   const team = await axios.get(

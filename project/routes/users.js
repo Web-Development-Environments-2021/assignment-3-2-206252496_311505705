@@ -5,7 +5,6 @@ const users_utils = require("./utils/users_utils");
 const players_utils = require("./utils/players_utils");
 const matches_utils = require("./utils/matches_utils");
 
-
 /**
  * Authenticate all incoming requests by middleware
  */
@@ -24,9 +23,7 @@ router.use(async function (req, res, next) {
   }
 });
 
-/**
- * This path gets body with playerId and save this player in the favorites list of the logged-in user
- */
+// ADD MATCH TO FAVORITS
 router.post("/favoritematches", async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
@@ -38,9 +35,7 @@ router.post("/favoritematches", async (req, res, next) => {
   }
 });
 
-/**
- * This path returns the favorites players that were saved by the logged-in user
- */
+// GET ALL USER'S FAVORITS
 router.get("/favoritematches", async (req, res, next) => {
   try {
     const user_id = req.session.user_id;

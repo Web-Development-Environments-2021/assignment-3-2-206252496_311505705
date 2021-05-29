@@ -5,6 +5,7 @@ const players_utils = require("./utils/players_utils");
 const teams_utils = require("./utils/teams_utils");
 const matches_utils = require("./utils/matches_utils");
 
+// TEAM PAGE
 router.get("/teamFullDetails/:teamId", async (req, res, next) => {
   try {
     const team_matches = await teams_utils.getTeamMatches(req.params.teamId);

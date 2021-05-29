@@ -8,12 +8,14 @@
 -- ALTER TABLE referee
 -- ADD name [varchar](300);
 
-INSERT INTO referee
-	(name)
-VALUES
-	('Erez');
+-- INSERT INTO referee
+-- 	(name)
+-- VALUES
+-- 	('Erez');
 
 -- DELETE FROM referee WHERE referee_id = 3;
 ALTER TABLE matches
 ADD CONSTRAINT refereeD
-DEFAULT 0 FOR referee;
+DEFAULT NULL FOR referee;
+
+DELETE FROM eventbook WHERE eventbook_id = 7;
