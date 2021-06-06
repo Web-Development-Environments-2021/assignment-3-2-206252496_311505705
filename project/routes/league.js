@@ -58,15 +58,20 @@ router.post("/addMatch", async (req, res, next) => {
 
 router.post("/addEvent", async (req, res, next) => {
   try {
-    // add the new event
-    await league_utils.addEvent(
-      req.body.match_id,
-      req.body.date,
-      req.body.time,
-      req.body.gamemin,
-      req.body.event
-    );
-    res.status(201).send("Event created");
+    const games = await matches_utils.getGamesDetails();
+    if (games[1].includes(req.body.match_id)) {
+      // add the new event
+      await league_utils.addEvent(
+        req.body.match_id,
+        req.body.date,
+        req.body.time,
+        req.body.gamemin,
+        req.body.event
+      );
+      res.status(201).send("Event created");
+    } else {
+      res.status(201).send("The match hasn't happend yet");
+    }
   } catch (error) {
     next(error);
   }
@@ -74,8 +79,13 @@ router.post("/addEvent", async (req, res, next) => {
 
 router.put("/addResult", async (req, res, next) => {
   try {
-    await league_utils.addResult(req.body.match_id, req.body.result);
-    res.status(201).send("Result updated");
+    const games = await matches_utils.getGamesDetails();
+    if (games[1].includes(req.body.match_id)) {
+      await league_utils.addResult(req.body.match_id, req.body.result);
+      res.status(201).send("Result updated");
+    } else {
+      res.status(201).send("The match hasn't happend yet");
+    }
   } catch (error) {
     next(error);
   }
