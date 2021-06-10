@@ -39,6 +39,7 @@ router.post("/favoritematches", async (req, res, next) => {
 router.get("/favoritematches", async (req, res, next) => {
   try {
     const user_id = req.session.user_id;
+    // const user_id = 4;
     let favorite_matches = {};
     const match_ids = await users_utils.getFavoriteMatches(user_id);
     let match_ids_array = [];

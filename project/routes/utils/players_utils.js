@@ -16,6 +16,7 @@ async function getPlayerData(player_id) {
   });
   let moreDet = await getPlayersInfo([player.data.data.team_id]);
   return {
+    player_id: player.data.data.player_id,
     name: moreDet[0]["name"],
     team_name: moreDet[0]["team_name"],
     image: moreDet[0]["image"],
@@ -99,12 +100,13 @@ async function getPlayerDetails(player_name) {
 function extractSearchPlayerData(players_info) {
   let name = "Not in a team";
   return players_info.map((player_info) => {
-    const { fullname, image_path, position_id } = player_info;
+    const { player_id, fullname, image_path, position_id } = player_info;
     if (player_info.hasOwnProperty("team")) {
       name = player_info.team.data.name;
     }
 
     return {
+      player_id: player_id,
       name: fullname,
       team_name: name,
       image: image_path,

@@ -36,11 +36,12 @@ async function getTeamDetails(team_name) {
 
 function extractRelevantTeamData(teams_info) {
   return teams_info.map((team_info) => {
-    const { name, logo_path } = team_info;
+    const { name, logo_path, id } = team_info;
 
     return {
       team_name: name,
       team_logo: logo_path,
+      team_id: id,
     };
   });
 }

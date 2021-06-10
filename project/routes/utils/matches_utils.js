@@ -184,7 +184,7 @@ async function getGamesDetails() {
     }
   });
   // console.log(past_ids);
-  // console.log(future)
+  // console.log(future);
   let future_info = await Promise.all(future);
   let Fres = extractFutureGamesData(future_info);
   return [Fres, past_ids];
@@ -213,6 +213,7 @@ async function extractPastGamesData(match_id) {
   return result;
 }
 
+// gets match's all events
 async function getEvents(match_id) {
   let events = await DButils.execQuery(
     `SELECT * FROM dbo.eventbook WHERE match_id='${match_id}'`
