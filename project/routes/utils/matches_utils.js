@@ -233,9 +233,10 @@ async function getEvents(match_id) {
 // Handel future games
 function extractFutureGamesData(future_info) {
   return future_info.map((game) => {
-    const { date, time, hometeam, awayteam, stadium } = game;
+    const { match_id, date, time, hometeam, awayteam, stadium } = game;
 
     return {
+      match_id: match_id,
       date: date,
       time: time,
       hometeam: hometeam,
