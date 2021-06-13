@@ -17,6 +17,27 @@ router.get("/getDetails", async (req, res, next) => {
   }
 });
 
+router.get("/isRepresentative", async (req, res, next) => {
+  DButils.execQuery("SELECT user_id FROM users")
+    .then((users) => {
+      if (users.find((x) => x.user_id === req.session.user_id)) {
+        DButils.execQuery(
+          `SELECT permission FROM users WHERE user_id = '${req.session.user_id}'`
+        )
+          .then((permission) => {
+            if (permission[0]["permission"] != 3) {
+              res.status(401).send(false);
+            } else {
+              res.status(201).send(true);
+              next();
+            }
+          })
+          .catch();
+      }
+    })
+    .catch();
+});
+
 // Checks user permission - Association Representative
 router.use("/", function (req, res, next) {
   DButils.execQuery("SELECT user_id FROM users")

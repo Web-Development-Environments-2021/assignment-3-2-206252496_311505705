@@ -79,14 +79,16 @@ async function getAllMatches() {
 
 function GamesData(matches) {
   return matches.map((game) => {
-    const { date, time, hometeam, awayteam, stadium } = game;
+    const { match_id, date, time, hometeam, awayteam, stadium, result } = game;
 
     return {
+      match_id: match_id,
       date: date,
       time: time,
       hometeam: hometeam,
       awayteam: awayteam,
       stadium: stadium,
+      result: result,
     };
   });
 }
